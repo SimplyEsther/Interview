@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TELUS GTLP Interview Prep - Flashcards</title>
+    <title>Interview Prep - Flashcards</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: #162d3d;
             min-height: 100vh;
             display: flex;
@@ -21,235 +17,188 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 900px;
-            width: 100%;
-        }
+        .container { max-width: 900px; width: 100%; }
 
+        /* ── Shared Header ── */
         .header {
             text-align: center;
             color: #10b981;
             margin-bottom: 40px;
         }
-
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
             text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
         }
-
         .header p {
             font-size: 1.1rem;
             color: #6ee7b7;
             opacity: 0.9;
         }
 
+        /* ══════════════════════════════
+           HOME SCREEN — category cards
+        ══════════════════════════════ */
+        #homeScreen { display: block; }
+        #deckScreen  { display: none;  }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .category-card {
+            background: #1a3347;
+            border: 2px solid rgba(139, 92, 246, 0.25);
+            border-radius: 14px;
+            padding: 28px 24px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent);
+            opacity: 0.8;
+        }
+        .category-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .category-card:active { transform: translateY(0); }
+
+        .cat-icon { font-size: 2rem; margin-bottom: 12px; }
+
+        .cat-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #c4b5fd;
+            margin-bottom: 6px;
+        }
+
+        .cat-count {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .cat-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .cat-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .pill {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 10px;
+            letter-spacing: 0.5px;
+        }
+        .pill-conceptual {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .pill-scenario {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .pill-behavioural {
+            background: rgba(139, 92, 246, 0.12);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .cat-arrow {
+            position: absolute;
+            bottom: 22px; right: 22px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            opacity: 0.6;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .category-card:hover .cat-arrow {
+            opacity: 1;
+            transform: translateX(3px);
+        }
+
+        /* ══════════════════════════════
+           DECK SCREEN — flashcards
+        ══════════════════════════════ */
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 2px solid rgba(139, 92, 246, 0.35);
+            padding: 8px 18px;
+            border-radius: 24px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #a78bfa;
+            transition: all 0.2s;
+            margin-bottom: 28px;
+        }
+        .back-btn:hover {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateX(-2px);
+            box-shadow: none;
+        }
+
+        /* Deck header (category name + card count) */
+        .deck-header {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .deck-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #c4b5fd;
+            margin-bottom: 4px;
+        }
+        .deck-subtitle {
+            font-size: 0.9rem;
+            color: #6ee7b7;
+            margin-bottom: 20px;
+        }
+
+        /* Progress */
         .progress-bar {
             width: 100%;
             height: 6px;
             background: rgba(139, 92, 246, 0.1);
             border-radius: 3px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: hidden;
             border: 1px solid rgba(139, 92, 246, 0.2);
         }
-
         .progress-fill {
             height: 100%;
             background: #8b5cf6;
             border-radius: 3px;
             transition: width 0.3s ease;
             box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-        }
-
-        .flashcard-wrapper {
-            perspective: 1000px;
-            margin-bottom: 30px;
-            height: 450px;
-        }
-
-        .flashcard {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .flashcard-front,
-        .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .flashcard-front {
-            background: #162d3d;
-            border: 2px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .flashcard-back {
-            background: #162d3d;
-            border: 2px solid rgba(139, 92, 246, 0.3);
-            transform: rotateY(180deg);
-            overflow-y: auto;
-        }
-
-        .flashcard-label {
-            font-size: 0.85rem;
-            color: #a78bfa;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
-        }
-
-        .flashcard-question {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #c4b5fd;
-            margin-bottom: 30px;
-            line-height: 1.4;
-        }
-
-        .flashcard-answer {
-            font-size: 0.95rem;
-            color: #d8d8ff;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
-
-        .key-points {
-            background: rgba(139, 92, 246, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 3px solid #8b5cf6;
-        }
-
-        .key-points-title {
-            font-weight: 700;
-            color: #a78bfa;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .key-points-list {
-            list-style: none;
-            font-size: 0.85rem;
-            color: #e9d5ff;
-        }
-
-        .key-points-list li {
-            padding: 6px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .key-points-list li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #a78bfa;
-            font-weight: bold;
-        }
-
-        .delivery-notes {
-            background: rgba(139, 92, 246, 0.08);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            border-left: 3px solid #a78bfa;
-        }
-
-        .delivery-notes-title {
-            font-weight: 700;
-            color: #a78bfa;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .delivery-notes-text {
-            font-size: 0.85rem;
-            color: #e9d5ff;
-            line-height: 1.6;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            background: transparent;
-            border: 2px solid #8b5cf6;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #a78bfa;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
-        }
-
-        button:hover {
-            background: rgba(139, 92, 246, 0.1);
-            box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button.primary {
-            background: #8b5cf6;
-            color: #162d3d;
-            border-color: #8b5cf6;
-        }
-
-        button.primary:hover {
-            background: #7c3aed;
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
-        }
-
-        button.flip-btn {
-            background: #10b981;
-            color: #162d3d;
-            border-color: #10b981;
-        }
-
-        button.flip-btn:hover {
-            background: #059669;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
-        }
-
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .stats {
@@ -260,59 +209,179 @@
             font-weight: 600;
         }
 
-        .flip-hint {
-            text-align: center;
+        /* Flashcard */
+        .flashcard-wrapper {
+            perspective: 1000px;
+            margin-bottom: 28px;
+            height: 460px;
+        }
+        .flashcard {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 38px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .flashcard-front {
+            background: #162d3d;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+        .flashcard-back {
+            background: #162d3d;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            transform: rotateY(180deg);
+            overflow-y: auto;
+        }
+
+        .flashcard-label {
+            font-size: 0.8rem;
+            color: #a78bfa;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+        .card-type-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+        }
+        .badge-conceptual { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-scenario   { background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+        .badge-behavioural{ background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+
+        .flashcard-question {
+            font-size: 1.75rem;
+            font-weight: 700;
             color: #c4b5fd;
-            font-size: 0.9rem;
-            margin-top: 30px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        .flashcard-answer {
+            font-size: 0.92rem;
+            color: #d8d8ff;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+        }
+
+        .key-points {
+            background: rgba(139,92,246,0.05);
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 14px;
+            border-left: 3px solid #8b5cf6;
+        }
+        .key-points-title {
+            font-weight: 700; color: #a78bfa;
+            margin-bottom: 8px; font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .key-points-list { list-style: none; font-size: 0.83rem; color: #e9d5ff; }
+        .key-points-list li { padding: 5px 0 5px 20px; position: relative; }
+        .key-points-list li:before { content: "→"; position: absolute; left: 0; color: #a78bfa; font-weight: bold; }
+
+        .delivery-notes {
+            background: rgba(139,92,246,0.08);
+            padding: 14px; border-radius: 8px;
+            margin-top: 14px; border-left: 3px solid #a78bfa;
+        }
+        .delivery-notes-title {
+            font-weight: 700; color: #a78bfa;
+            margin-bottom: 6px; font-size: 0.82rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .delivery-notes-text { font-size: 0.83rem; color: #e9d5ff; line-height: 1.6; }
+
+        .flip-hint {
+            text-align: center; color: #c4b5fd;
+            font-size: 0.9rem; margin-top: 20px;
             animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0%,100%{opacity:.7} 50%{opacity:1} }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+        /* Controls */
+        .controls {
+            display: flex; gap: 14px;
+            justify-content: center;
+            margin-bottom: 20px; flex-wrap: wrap;
         }
+        button {
+            background: transparent;
+            border: 2px solid #8b5cf6;
+            padding: 11px 22px; border-radius: 8px;
+            font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; color: #a78bfa;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 15px rgba(139,92,246,0.2);
+        }
+        button:hover {
+            background: rgba(139,92,246,0.1);
+            box-shadow: 0 0 25px rgba(139,92,246,0.4);
+            transform: translateY(-2px);
+        }
+        button:active { transform: translateY(0); }
+        button.flip-btn { background: #10b981; color: #162d3d; border-color: #10b981; }
+        button.flip-btn:hover { background: #059669; box-shadow: 0 0 30px rgba(16,185,129,0.6); }
+        button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
         .footer {
-            text-align: center;
-            color: #c4b5fd;
-            font-size: 0.9rem;
-            margin-top: 20px;
+            text-align: center; color: #c4b5fd;
+            font-size: 0.82rem; opacity: 0.6; margin-top: 8px;
         }
 
+        /* Mobile */
         @media (max-width: 600px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .flashcard-wrapper {
-                height: 500px;
-            }
-
-            .flashcard-front,
-            .flashcard-back {
-                padding: 25px;
-            }
-
-            .flashcard-question {
-                font-size: 1.4rem;
-            }
-
-            .controls {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
+            .header h1 { font-size: 1.9rem; }
+            .category-grid { grid-template-columns: 1fr; }
+            .flashcard-wrapper { height: 520px; }
+            .flashcard-front, .flashcard-back { padding: 24px; }
+            .flashcard-question { font-size: 1.3rem; }
+            .controls { flex-direction: column; }
+            button { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
+
+    <!-- ══ HOME SCREEN ══ -->
+    <div id="homeScreen">
         <div class="header">
-            <h1>✨ TELUS GTLP Interview Prep</h1>
-            <p>8 Flashcards • Security Operations Engineer Track</p>
+            <h1>✨ Interview Prep</h1>
+            <p>Security Operations Engineer • 32 Cards across 5 decks</p>
+        </div>
+
+        <div class="category-grid" id="categoryGrid"></div>
+    </div>
+
+    <!-- ══ DECK SCREEN ══ -->
+    <div id="deckScreen">
+        <button class="back-btn" onclick="goHome()">← Back to Categories</button>
+
+        <div class="deck-header">
+            <div class="deck-title" id="deckTitle"></div>
+            <div class="deck-subtitle" id="deckSubtitle"></div>
         </div>
 
         <div class="progress-bar">
@@ -328,6 +397,7 @@
                 <div class="flashcard-front">
                     <div>
                         <div class="flashcard-label">Question</div>
+                        <div id="cardTypeBadge"></div>
                         <div class="flashcard-question" id="question"></div>
                     </div>
                     <div class="flip-hint">👆 Click to reveal answer</div>
@@ -336,11 +406,11 @@
                     <div>
                         <div class="flashcard-label">Answer</div>
                         <div class="flashcard-answer" id="answer"></div>
-                        <div class="key-points" id="keyPointsSection">
+                        <div class="key-points">
                             <div class="key-points-title">Key Talking Points</div>
                             <ul class="key-points-list" id="keyPoints"></ul>
                         </div>
-                        <div class="delivery-notes" id="deliveryNotesSection">
+                        <div class="delivery-notes">
                             <div class="delivery-notes-title">💡 Delivery Notes</div>
                             <div class="delivery-notes-text" id="deliveryNotes"></div>
                         </div>
@@ -351,19 +421,74 @@
 
         <div class="controls">
             <button id="prevBtn" onclick="previousCard()">← Previous</button>
-            <button class="flip-btn" id="flipBtn" onclick="flipCard(); event.stopPropagation();">Flip Card</button>
+            <button class="flip-btn" onclick="flipCard(); event.stopPropagation();">Flip Card</button>
             <button id="nextBtn" onclick="nextCard()">Next →</button>
         </div>
 
-        <div class="footer">
-            <p>Week 1: Foundation Questions + Career Vision</p>
-            <p style="opacity: 0.7; margin-top: 8px;">Questions 6-8: Future Vision, Mission Statement, What You Bring</p>
-        </div>
+        <div class="footer">⌨️ Arrow keys to navigate · Spacebar to flip</div>
     </div>
 
-    <script>
-        const flashcards = [
+</div>
+
+<script>
+    /* ═══════════════════════════════════════════════
+       CATEGORY META
+    ═══════════════════════════════════════════════ */
+    const categoryMeta = [
+        {
+            key: 'behavioural',
+            icon: '🎯',
+            name: 'Behavioural',
+            accent: '#a78bfa',
+            desc: 'TELUS GTLP-specific: Tell me about yourself, why TELUS, STAR stories, mission, and closing questions.',
+            pills: ['behavioural'],
+            pillLabels: { behavioural: '8 Behavioural' }
+        },
+        {
+            key: 'soc',
+            icon: '🛡️',
+            name: 'SOC / Incident Response',
+            accent: '#10b981',
+            desc: 'SIEM monitoring, IR phases, alert triage, threat hunting vs reactive monitoring, and live incident scenarios.',
+            pills: ['conceptual', 'scenario'],
+            pillLabels: { conceptual: '3 Conceptual', scenario: '3 Scenario' }
+        },
+        {
+            key: 'grc',
+            icon: '📋',
+            name: 'GRC / Audit & Compliance',
+            accent: '#60a5fa',
+            desc: 'ISO 27001, NIST CSF, PCI-DSS, risk assessments, policy hierarchy, and audit evidence walkthroughs.',
+            pills: ['conceptual', 'scenario'],
+            pillLabels: { conceptual: '3 Conceptual', scenario: '3 Scenario' }
+        },
+        {
+            key: 'infrastructure',
+            icon: '☁️',
+            name: 'Infrastructure / Cloud',
+            accent: '#f472b6',
+            desc: 'Shared responsibility model, Azure AD vs on-prem AD, Terraform/DevSecOps, Docker security, and least privilege.',
+            pills: ['conceptual', 'scenario'],
+            pillLabels: { conceptual: '4 Conceptual', scenario: '2 Scenario' }
+        },
+        {
+            key: 'appsec',
+            icon: '🔐',
+            name: 'AppSec / Pentesting',
+            accent: '#f59e0b',
+            desc: 'Pentest methodology, OWASP Top 3, SAST vs DAST, SQL injection, IDOR handling, and WAF misconceptions.',
+            pills: ['conceptual', 'scenario'],
+            pillLabels: { conceptual: '3 Conceptual', scenario: '3 Scenario' }
+        }
+    ];
+
+    /* ═══════════════════════════════════════════════
+       FLASHCARD DATA
+    ═══════════════════════════════════════════════ */
+    const allCards = {
+        behavioural: [
             {
+                type: "behavioural",
                 question: "Tell me about yourself",
                 answer: "I'm a recent SANS graduate with honors and currently work as a Security Operations Engineer at Oasis, a software startup where I'm building the security culture from the ground up — compliance frameworks, security awareness training, and this quarter, web application pen testing on our products before they ship.\n\nI currently work as a cybersecurity TA, but before that I was the lead cybersecurity instructor for three years at Brock's Cybersecurity Club, where I partnered with the CISO of Microsoft Canada and trained 140+ students. Right now I'm training 200+ Amazon employees for their Security Plus certification.\n\nMy superpower is security awareness training — and here's the proof: at Oasis, we went from zero participation to 93% in Q1, which is exceptional for a distributed team. Whether it's building compliance frameworks, instructing students, or training professionals, security awareness shows up in everything I do.",
                 keyPoints: [
@@ -377,6 +502,7 @@
                 deliveryNotes: "TIMING: ~60–75 seconds. DELIVERY: Conversational — you're telling a story, not reciting. BUILD THE STAGE: Set context at Oasis early. HIGHLIGHT: The 93% stat is your anchor — pause before delivering it. EYE CONTACT: Look at interviewer, don't rush. Let them ask the next question."
             },
             {
+                type: "behavioural",
                 question: "What draws you specifically to TELUS and the GTLP program?",
                 answer: "What really drew me to TELUS GTLP was the 9-month rotation structure — specifically Threat Detection & Incident Response, DevSecOps, and Cloud Security. I've been watching the TELUS job board closely, and this is exactly what I need at this stage of my career.\n\nI'm a GSOC and GSEC certified engineer, and most of my experience has been blue team — threat detection and monitoring at Oasis. I have foundational SIEM knowledge from OpenSearch and Elasticsearch, but those are open-source tools. Enterprise tools like Splunk are where I really want to go.\n\nI want deeper hands-on experience with cloud security — AWS and Azure — and understanding how to embed security from the start through DevSecOps. TELUS's approach to scaling security while building real customer impact aligns directly with how I want to develop as a leader.",
                 keyPoints: [
@@ -390,8 +516,9 @@
                 deliveryNotes: "TIMING: ~75 seconds. DELIVERY: Start conversationally — 'So what really drew me...' SPECIFICITY: Name the three rotation areas explicitly. HONESTY: Acknowledge open-source vs enterprise gap — it shows self-awareness. ENTHUSIASM: Let genuine excitement about Splunk + cloud come through. CLOSE: End on leadership development."
             },
             {
+                type: "behavioural",
                 question: "Tell me about a time you faced a challenging situation at work (STAR format)",
-                answer: "SITUATION:\nWhen I joined Oasis as a Security Engineer, we had zero security infrastructure — no policies, no compliance framework, no training for the distributed team of developers. There was no way to prove to auditors we were security-aware.\n\nTASK:\nBuild a security culture from the ground up — develop policies, evaluate and implement security tools, and create measurable compliance evidence for all employees.\n\nACTION:\n• Developed security policies based on industry standards: email policy, password policy, data retention, and more — creating a documented baseline\n• Evaluated security platforms on 4 criteria: compatibility with our tech stack, cost-effectiveness (startup budget), vendor reputation, and scalability\n• Selected Watchdog Security — met all 4 criteria, centralized compliance monitoring, simplified risk assessments, full visibility into user identities\n• Designed role-based security awareness training: AI security practices for developers, general awareness for all staff — made it mandatory\n• Tracked participation and compliance metrics throughout the quarter\n\nRESULT:\n• Went from 0% to 93% participation in Q1 — exceptional for a distributed team\n• Generated proof of security awareness training\n• Documented all policies and created a compliance evidence package\n• Put the company on track for ISO 27001 compliance\n• All of this in three months.",
+                answer: "SITUATION:\nWhen I joined Oasis as a Security Engineer, we had zero security infrastructure — no policies, no compliance framework, no training for the distributed team of developers. There was no way to prove to auditors we were security-aware.\n\nTASK:\nBuild a security culture from the ground up — develop policies, evaluate and implement security tools, and create measurable compliance evidence for all employees.\n\nACTION:\n• Developed security policies based on industry standards: email policy, password policy, data retention, and more — creating a documented baseline\n• Evaluated security platforms on 4 criteria: compatibility with our tech stack, cost-effectiveness (startup budget), vendor reputation, and scalability\n• Selected Watchdog Security — met all 4 criteria, centralized compliance monitoring, simplified risk assessments, full visibility into user identities\n• Designed role-based security awareness training: AI security practices for developers, general awareness for all staff — made it mandatory\n• Tracked participation and compliance metrics throughout the quarter\n\nRESULT:\n• Went from 0% to 93% participation in Q1 — exceptional for a distributed team\n• Generated proof of security awareness training\n• Documented all policies and created a compliance evidence package\n• Put the company on track for ISO 27001 compliance — all within three months.",
                 keyPoints: [
                     "Situation: Zero security infrastructure at a distributed startup",
                     "Task: Build full security culture from scratch",
@@ -403,6 +530,7 @@
                 deliveryNotes: "TIMING: ~90 seconds. DELIVERY: Build the stage — 'When they brought me on board, we had zero...' PAUSE: Between each STAR section. SLOW DOWN: On the result — let 93% land. SPECIFICITY: Name the 4 evaluation criteria — it shows rigor. CONNECT: Tie to ISO 27001 at the end for enterprise relevance."
             },
             {
+                type: "behavioural",
                 question: "What's one area you want to grow technically?",
                 answer: "Right now I'm looking to grow my SIEM and blue team tool stack — specifically Splunk.\n\nI have foundational SIEM knowledge from OpenSearch and Elasticsearch at Oasis, and from LetsDefend and my GSOC training. But Splunk is the enterprise standard I really want to master.\n\nIt's actually one of the things that drew me to TELUS GTLP — Splunk is a core tool in the Threat Detection and Incident Response rotation, which I'm most excited about. I'm not just eager to learn Splunk itself, but to understand how to architect SIEM environments at scale and how detection feeds into security operations at an enterprise level.",
                 keyPoints: [
@@ -416,8 +544,9 @@
                 deliveryNotes: "TIMING: ~60 seconds. DELIVERY: Name Splunk clearly and early. PAUSE: After naming it, before explaining why. AUTHENTICITY: Show genuine excitement — this isn't a rehearsed weakness, it's real ambition. GROUND IT: Reference your existing SIEM foundation to show you're not starting from zero. CLOSE: End on the bigger vision (architecting at scale)."
             },
             {
+                type: "behavioural",
                 question: "What's your understanding of TELUS and why you're a fit?",
-                answer: "TELUS is Canada's leading telecom company pioneering digital transformation. What attracted me to GTLP is your commitment to building security operations at scale while maintaining compliance — from cloud infrastructure security to threat detection to GRC.\nI've seen firsthand at Oasis how small teams struggle to do this alone. TELUS's scale means I'll work with enterprise-level Splunk, cloud security at scale, and mature compliance frameworks like you're likely operating under.\nThat aligns perfectly with where I want to develop: becoming a Security Operations Engineer who understands the entire security stack from detection through compliance evidence.",
+                answer: "TELUS is Canada's leading telecom company pioneering digital transformation. What attracted me to GTLP is your commitment to building security operations at scale while maintaining compliance — from cloud infrastructure security to threat detection to GRC.\n\nI've seen firsthand at Oasis how small teams struggle to do this alone. TELUS's scale means I'll work with enterprise-level Splunk, cloud security at scale, and mature compliance frameworks.\n\nThat aligns perfectly with where I want to develop: becoming a Security Operations Engineer who understands the entire security stack from detection through compliance evidence.",
                 keyPoints: [
                     "Company context: Telecom leader + digital transformation",
                     "GTLP appeal: Scale + structured rotations + mentorship",
@@ -426,11 +555,12 @@
                     "Vision: Security Operations Engineer (SOC → GRC bridge)",
                     "Authentic connection: Small startup → enterprise growth"
                 ],
-                deliveryNotes: "TIMING: ~75 seconds. DELIVERY: Mention specific TELUS initiatives if researched (check LinkedIn, newsroom). CLARITY: Articulate SOC → GRC bridge. PAUSE: After company context. AUTHENTICITY: Contrast Oasis scale with TELUS (shows growth mindset). CLOSE: Circle back to your role vision. RESEARCH: Check TELUS social media + recent announcements."
+                deliveryNotes: "TIMING: ~75 seconds. DELIVERY: Mention specific TELUS initiatives if researched (check LinkedIn, newsroom). CLARITY: Articulate SOC → GRC bridge. PAUSE: After company context. AUTHENTICITY: Contrast Oasis scale with TELUS (shows growth mindset). CLOSE: Circle back to your role vision."
             },
             {
+                type: "behavioural",
                 question: "Where do you see yourself in 5 years?",
-                answer: "I see myself as a recognized Security Operations Engineer leading blue-team operations at scale.\nIn the immediate term (2–3 years), I want to master threat detection and incident response across cloud and on-prem environments — the core TELUS competencies.\nIn the longer term (5+ years), I want to bridge operations and compliance: designing SOC processes that generate compliance evidence by design, not as an afterthought.\nUltimately, I want to build security awareness programs for organizations, but only after I've earned the credibility of being a working security engineer first. That's why TELUS GTLP is the perfect launch point.",
+                answer: "I see myself as a recognized Security Operations Engineer leading blue-team operations at scale.\n\nIn the immediate term (2–3 years), I want to master threat detection and incident response across cloud and on-prem environments — the core TELUS competencies.\n\nIn the longer term (5+ years), I want to bridge operations and compliance: designing SOC processes that generate compliance evidence by design, not as an afterthought.\n\nUltimately, I want to build security awareness programs for organizations — but only after I've earned the credibility of being a working security engineer first. That's why TELUS GTLP is the perfect launch point.",
                 keyPoints: [
                     "Near-term (2–3 years): Master threat detection + incident response",
                     "Mid-term (5 years): Lead SOC operations or GRC architecture",
@@ -439,11 +569,12 @@
                     "TELUS as foundation: Learning + mentorship + scale",
                     "Progression clarity: Role growth, not lateral moves"
                 ],
-                deliveryNotes: "TIMING: ~60 seconds. DELIVERY: Speak clearly about timeline (near/mid/long term). PAUSE: Between each phase. AUTHENTICITY: Show self-awareness (awareness comes later, after ops credibility). RELEVANCE: Tie back to TELUS (this role builds that path). NO RUSH: Take your time on the progression. EYE CONTACT: Maintain throughout."
+                deliveryNotes: "TIMING: ~60 seconds. DELIVERY: Speak clearly about timeline (near/mid/long term). PAUSE: Between each phase. AUTHENTICITY: Show self-awareness (awareness comes later, after ops credibility). RELEVANCE: Tie back to TELUS (this role builds that path). NO RUSH: Take your time on the progression."
             },
             {
+                type: "behavioural",
                 question: "What's your mission as a security professional, and why does TELUS matter to it?",
-                answer: "My mission is simple: Make security operational and accessible, not a bottleneck.\nMost organizations treat security as 'compliance checkbox' instead of 'how do we detect and respond to threats efficiently?' I want to build Security Operations Engineer teams that see both sides: how to detect threats in real-time AND how to prove to auditors that those detections prove control.\nTELUS matters because you're a massive organization where I can learn to scale both — operating mature detection at enterprise level while understanding compliance architecture.\nThen, in a few years, I'll teach that integrated model to smaller organizations as a security consultant. That's where I want to create impact.",
+                answer: "My mission is simple: Make security operational and accessible — not a bottleneck.\n\nMost organizations treat security as a 'compliance checkbox' instead of asking 'how do we detect and respond to threats efficiently?' I want to build Security Operations Engineer teams that see both sides: how to detect threats in real-time AND how to prove to auditors that those detections prove control.\n\nTELUS matters because you're a massive organization where I can learn to scale both — operating mature detection at enterprise level while understanding compliance architecture.\n\nThen, in a few years, I'll teach that integrated model to smaller organizations. That's where I want to create real impact.",
                 keyPoints: [
                     "Mission: Operational + accessible security (no silos)",
                     "Problem: Organizations see security as compliance checkbox",
@@ -452,11 +583,12 @@
                     "Future impact: Teach this model to SMBs",
                     "Values: Operations-first thinking, compliance integration"
                 ],
-                deliveryNotes: "TIMING: ~75 seconds. DELIVERY: Speak passionately but measured about mission. CLARITY: Make detection + compliance link crystal clear. PAUSE: After stating mission, before explaining TELUS role. BUILD CONTEXT: 'At Oasis, I saw how small teams...' AUTHENTICITY: This should feel genuine. CLOSE: Circle back to TELUS as the learning bridge to your future impact."
+                deliveryNotes: "TIMING: ~75 seconds. DELIVERY: Speak passionately but measured about mission. CLARITY: Make detection + compliance link crystal clear. PAUSE: After stating mission, before explaining TELUS role. BUILD CONTEXT: 'At Oasis, I saw how small teams...' CLOSE: Circle back to TELUS as the learning bridge."
             },
             {
+                type: "behavioural",
                 question: "What would you ask us about this role or TELUS?",
-                answer: "I'd ask a few strategic questions:\nQUESTION 1: SOC → Compliance Bridge\n- How does TELUS's SOC structure connect detection workflows to compliance evidence?\n- Are threat alerts fed directly into audit trails or is that a separate process?\n- This shows I understand the critical link between operations and compliance.\nQUESTION 2: Rotation & Career Path\n- What's the relationship between the Threat Detection rotation and GRC/Compliance rotations?\n- Do people move between them, or do they remain specialized?\n- This shows I'm thinking about long-term progression.\nQUESTION 3: Skill Gaps\n- What's the biggest gap you see in Security Operations Engineers coming out of school?\n- Is it tool expertise (Splunk), or is it understanding the compliance/operations bridge?\n- This shows I'm listening to what TELUS actually needs to teach.\nQUESTION 4: Mentorship & Learning\n- How do you mentor technical growth alongside leadership development in GTLP?\n- This shows I value both hands-on skills AND leadership development.",
+                answer: "I'd ask a few strategic questions:\n\nQUESTION 1: SOC → Compliance Bridge\n— How does TELUS's SOC structure connect detection workflows to compliance evidence? Are threat alerts fed directly into audit trails or is that a separate process?\n\nQUESTION 2: Rotation & Career Path\n— What's the relationship between the Threat Detection rotation and GRC/Compliance rotations? Do people move between them or remain specialized?\n\nQUESTION 3: Skill Gaps\n— What's the biggest gap you see in Security Operations Engineers coming out of school — is it tool expertise like Splunk, or understanding the compliance/operations bridge?\n\nQUESTION 4: Mentorship & Learning\n— How do you mentor technical growth alongside leadership development in GTLP?",
                 keyPoints: [
                     "Question 1: SOC → compliance bridge (your strength area)",
                     "Question 2: Rotation structure + long-term career paths",
@@ -465,81 +597,485 @@
                     "Meta insight: Questions show strategic, systems-level thinking",
                     "Relevance: Each question ties back to Security Operations Engineer vision"
                 ],
-                deliveryNotes: "TIMING: ~90 seconds (ask 2–3 questions, not all 4). DELIVERY: Ask these naturally, not as a script. PAUSE: Between each question. LISTEN ACTIVELY: Actually listen to answers, don't plan next question. CLARITY: Make questions specific (not generic 'what's the culture'). AUTHENTICITY: Show genuine curiosity about operations + compliance bridge. CLOSE: Thank them for the conversation and express excitement about the role."
+                deliveryNotes: "TIMING: ~90 seconds (ask 2–3 questions, not all 4). DELIVERY: Ask these naturally, not as a script. PAUSE: Between each question. LISTEN ACTIVELY: Actually listen to answers, don't plan the next one. AUTHENTICITY: Show genuine curiosity about the operations + compliance bridge. CLOSE: Thank them and express excitement."
             }
-        ];
+        ],
 
-        let currentIndex = 0;
-        let isFlipped = false;
-
-        function loadCard() {
-            const card = flashcards[currentIndex];
-            document.getElementById('question').textContent = card.question;
-            document.getElementById('answer').textContent = card.answer;
-
-            const keyPointsList = document.getElementById('keyPoints');
-            keyPointsList.innerHTML = '';
-            card.keyPoints.forEach(point => {
-                const li = document.createElement('li');
-                li.textContent = point;
-                keyPointsList.appendChild(li);
-            });
-
-            document.getElementById('deliveryNotes').textContent = card.deliveryNotes;
-            document.getElementById('cardCounter').textContent = `Card ${currentIndex + 1} of ${flashcards.length}`;
-
-            updateProgress();
-            resetFlip();
-            updateButtonStates();
-        }
-
-        function flipCard() {
-            const flashcard = document.getElementById('flashcard');
-            flashcard.classList.toggle('flipped');
-            isFlipped = !isFlipped;
-        }
-
-        function nextCard() {
-            if (currentIndex < flashcards.length - 1) {
-                currentIndex++;
-                loadCard();
+        soc: [
+            {
+                type: "conceptual",
+                question: "Walk me through your SIEM monitoring process. What does your day-to-day threat detection look like?",
+                answer: "At Oasis I set up our threat detection using OpenSearch and Elasticsearch — open-source SIEM tools. My daily process follows a structured triage workflow:\n\n1. MORNING REVIEW: Check overnight alerts sorted by severity — critical first, then high, then medium. Low-severity alerts are reviewed weekly unless correlated with a higher-priority event.\n\n2. TRIAGE LOGIC: For each alert I ask — Is this a known-good baseline behaviour (false positive)? Is this an isolated event or part of a pattern? What asset is involved and what's its criticality?\n\n3. INVESTIGATION: For suspicious alerts — pull related logs, check IP reputation, correlate with user activity. I document findings in our ticketing system even if it turns out benign.\n\n4. TUNING: When I see repeated false positives, I update detection rules rather than ignore the noise — you want the alert to fire accurately, not frequently.\n\nAt TELUS, I'm eager to apply this same methodology at enterprise scale with Splunk — building SPL queries, creating correlation rules, and understanding how SOC workflows feed into incident response playbooks.",
+                keyPoints: [
+                    "OpenSearch + Elasticsearch at Oasis (real, not theoretical)",
+                    "Triage framework: severity → asset criticality → pattern detection",
+                    "Key question: false positive vs true positive — document either way",
+                    "Tuning mindset: fix the rule, don't ignore the noise",
+                    "TELUS goal: Splunk SPL + enterprise-scale correlation rules",
+                    "Shows process maturity, not just tool knowledge"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. GROUND IT EARLY: 'At Oasis, we use OpenSearch...' — establishes real experience. WALK THEM THROUGH: Use numbered steps naturally, don't rush. SHOW THINKING: The triage logic section is where you demonstrate analytical depth. CONNECT: End by bridging to what you want to learn at TELUS (Splunk). DON'T OVER-EXPLAIN: Pick 2–3 steps and go deep rather than listing all 4."
+            },
+            {
+                type: "conceptual",
+                question: "What are the phases of incident response? Walk me through each one.",
+                answer: "I use the PICERL framework from my GCIH training:\n\nPREPARATION: Build your IR plan before anything happens — playbooks, runbooks, escalation contacts, communication templates. At Oasis, I wrote the foundational IR policy as part of our ISO 27001 compliance work.\n\nIDENTIFICATION: Detect the incident — could be a SIEM alert, user report, or anomalous log pattern. Key question: Is this actually an incident, or a false positive? Document your findings immediately.\n\nCONTAINMENT: Stop the bleeding without destroying evidence. Short-term: isolate the affected system. Long-term: block malicious IPs, revoke compromised credentials, patch the vector.\n\nERADICATION: Remove the root cause — malware, backdoor, misconfiguration, whatever got them in.\n\nRECOVERY: Restore systems to normal operation. Validate that eradication worked before going back online. Monitor closely post-recovery.\n\nLESSONS LEARNED: This is the most skipped and most valuable phase. What failed? What detection gap let this happen? Update playbooks and controls.",
+                keyPoints: [
+                    "Framework: PICERL (GCIH certified — this is real training)",
+                    "Preparation: IR policy + playbooks — built this at Oasis",
+                    "Identification: SIEM alert → validate → document (even false positives)",
+                    "Containment: isolate without destroying evidence",
+                    "Eradication + Recovery: root cause removal → validate → monitor",
+                    "Lessons Learned: most skipped, most valuable — always include this"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. DON'T JUST LIST: For each phase, add one sentence of real context — 'At Oasis, I wrote the IR policy...' GCIH CREDENTIAL: Mention it naturally — 'from my GCIH training, I use PICERL.' EMPHASIS: Pause on Lessons Learned — interviewers love that you value it. CONNECT TO TELUS: 'At enterprise scale, the Containment phase gets complex with distributed systems — that's exactly what I want to learn.'"
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: A SIEM alert fires — a developer's credentials were used to log in from an unknown IP in Eastern Europe at 3am. Walk me through exactly what you do.",
+                answer: "This is a potential account compromise — I treat it as real until proven otherwise. Here's my exact process:\n\nIMMEDIATE (0–5 min):\n• Disable the compromised account immediately — stop the active session\n• Document the timestamp, IP, geolocation, and what resources were accessed\n• Notify the developer: 'Were you travelling or using a VPN?' — rule out legitimate access first\n\nINVESTIGATION (5–30 min):\n• Pull all activity logs for that account in the last 24 hours — what did they access?\n• Check IP reputation (VirusTotal, AbuseIPDB) — is this a known malicious IP?\n• Look for lateral movement — did the login attempt to access other systems or escalate privileges?\n• Review authentication logs — was MFA bypassed? Was this a successful login or just an attempt?\n\nCONTAINMENT:\n• Force password reset on the account\n• Revoke all active sessions and API tokens associated with that user\n• If data was accessed: assess what was exposed and whether breach notification applies\n\nREPORTING:\n• Open an incident ticket (Oasis: Slack + email; CIBC: ServiceNow)\n• Escalate to management with initial findings\n• Begin drafting timeline for post-incident report",
+                keyPoints: [
+                    "Immediate action: disable account FIRST, investigate second",
+                    "Verify before assuming: check with the developer (VPN? travel?)",
+                    "Log forensics: what was accessed, not just how they got in",
+                    "IP reputation check: VirusTotal, AbuseIPDB — real tools",
+                    "ServiceNow for ticketing (CIBC experience — enterprise tool)",
+                    "MFA check: was it bypassed? How? This informs the root cause"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. STRUCTURE IT: Say 'Immediate actions, then investigation, then containment' — interviewers love structured thinking under pressure. REAL TOOLS: Drop VirusTotal, AbuseIPDB, ServiceNow — they show operational awareness. HUMAN STEP: The 'check with the developer' step shows you don't jump to conclusions. CIBC MENTION: Natural place to reference ServiceNow from your CIBC experience. CALM ENERGY: Speak confidently — you've thought through this."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between threat hunting and reactive monitoring, and when would you use each?",
+                answer: "These are two fundamentally different security postures:\n\nREACTIVE MONITORING (Alert-Driven):\nYou wait for the SIEM to fire — a rule triggers, you investigate. This is the baseline — essential but not sufficient. The problem: you can only detect what you've written rules for. If an attacker is operating below your detection threshold or using a novel technique, they're invisible.\n\nThis is where most of my current work at Oasis lives — monitoring OpenSearch alerts and tuning detection rules.\n\nTHREAT HUNTING (Hypothesis-Driven):\nYou proactively search for threats assuming they're already in your environment — before any alert fires. A hunter starts with a hypothesis: 'What if an attacker is using living-off-the-land techniques to blend into normal traffic?' Then you go look for evidence.\n\nKey difference: hunting doesn't wait for an alert to tell you something's wrong.\n\nWHEN TO USE EACH:\n• Reactive monitoring: always on, your baseline defense\n• Threat hunting: when you have mature detection coverage and want to find the gaps\n\nFrom my GSOC training, threat hunting is a maturity milestone — you need solid baseline detection first.",
+                keyPoints: [
+                    "Reactive: alert-driven, rule-based — catches known threats",
+                    "Hunting: hypothesis-driven, proactive — catches unknown threats",
+                    "Key limitation of reactive: you only detect what you wrote rules for",
+                    "Hunting starts with a hypothesis, not an alert",
+                    "Maturity model: reactive first → hunting when baseline is solid",
+                    "GSOC training + Oasis experience grounds this in reality"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. CONTRAST CLEARLY: Draw a hard line between the two — interviewers want to see you understand the distinction, not blend them together. PERSONAL: 'Most of my current work at Oasis is reactive monitoring...' — shows honest self-awareness. DEPTH: The 'living-off-the-land' example shows you know attacker techniques. CLOSE: Connect to TELUS — enterprise SOCs are where hunting really pays off."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: You inherit a SOC with 500 daily alerts, 80% of which are false positives. How do you fix it?",
+                answer: "Alert fatigue is one of the most dangerous problems in a SOC — analysts start ignoring alerts entirely, which is exactly when attackers succeed. Here's my systematic approach:\n\nPHASE 1 — AUDIT (Week 1):\nCategorize all 500 alerts by type and source. Which rules are firing most? Which have never resulted in a confirmed incident? Build a data-driven picture before touching anything.\n\nPHASE 2 — TUNE AGGRESSIVELY (Weeks 2–3):\n• Whitelist known-good behaviour: internal scanners, backup jobs, monitoring tools\n• Raise thresholds on chatty rules — a single failed login isn't an alert; 10 failed logins in 2 minutes is\n• Consolidate related alerts into correlation rules — instead of 50 individual alerts, one correlated incident\n\nPHASE 3 — PRIORITIZE BY ASSET VALUE:\nA failed login on a developer's laptop ≠ a failed login on the domain controller. Map assets to criticality so the SIEM weights alerts accordingly.\n\nPHASE 4 — MEASURE:\nAfter tuning, track the false positive rate weekly. Target: under 20% false positives within 30 days.\n\nAt Oasis I did a version of this with OpenSearch. At TELUS scale, Splunk's correlation and ML toolkit would be invaluable.",
+                keyPoints: [
+                    "Alert fatigue = real risk (analysts ignore everything)",
+                    "Phase 1: Audit before tuning — data first, changes second",
+                    "Whitelist known-good: scanners, backup jobs, monitoring tools",
+                    "Raise thresholds: failed logins need context to be actionable",
+                    "Asset-based prioritization: domain controller > developer laptop",
+                    "Measure after: false positive rate as a KPI, reviewed monthly"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. STRUCTURE IT: '4 phases' gives a clear, confident answer. REAL EXPERIENCE: 'At Oasis with OpenSearch, I did a version of this...' — ground it. DANGER FRAMING: Open with why alert fatigue matters (attackers succeed when analysts are numb). TELUS BRIDGE: End with Splunk ML — shows you've researched enterprise tooling. DON'T RUSH: Let the phases land. Interviewers want to see methodical thinking."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between a false positive and a false negative in a SOC context — and which is more dangerous?",
+                answer: "These are two types of detection errors on opposite ends of the risk spectrum:\n\nFALSE POSITIVE: The SIEM fires an alert, but no real threat exists. A legitimate admin running a port scan triggers an intrusion rule. The danger: alert fatigue. If analysts see 500 false positives a day, they stop trusting the system — and that's exactly when a real threat slips through.\n\nFALSE NEGATIVE: A real threat occurs, but no alert fires. An attacker living off the land using built-in Windows tools — no custom malware, no signature match — moves laterally for weeks without triggering a single rule.\n\nWHICH IS MORE DANGEROUS?\nGenerally, false negatives are more dangerous — they're the silent failures that lead to undetected breaches. But in a high-volume SOC, excessive false positives create the conditions for false negatives to succeed.\n\nSo they're interconnected: you can't over-tune rules to eliminate all false positives, or you'll create blind spots. The goal is calibration — not zero alerts, but high-signal alerts.\n\nFrom my GSOC training and Oasis monitoring work, finding this balance through continuous rule tuning is one of the most practical daily challenges in blue team operations.",
+                keyPoints: [
+                    "FP: alert fires, no real threat — creates analyst fatigue",
+                    "FN: real threat exists, no alert — silent, most dangerous",
+                    "The danger connection: too many FPs → fatigue → FNs succeed",
+                    "Living-off-the-land example: no signature = FN risk",
+                    "Goal: calibration, not zero alerts — high-signal alerts",
+                    "GSOC + Oasis tuning experience grounds this answer"
+                ],
+                deliveryNotes: "TIMING: ~60 seconds. CLEAR DEFINITIONS FIRST: Define both before answering which is worse. DON'T JUST PICK ONE: The nuanced answer (they're interconnected) is what interviewers want to hear. REAL EXAMPLE: Living-off-the-land shows you know attacker tradecraft — that's impressive. CLOSE: Connect to your daily tuning work at Oasis — it's not theoretical."
             }
-        }
+        ],
 
-        function previousCard() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                loadCard();
+        grc: [
+            {
+                type: "conceptual",
+                question: "Walk me through how you built the compliance program at Oasis from scratch.",
+                answer: "When I joined Oasis, the compliance posture was essentially zero — no documented policies, no training records, and no way to demonstrate to auditors that we met any security baseline. Here's exactly what I did:\n\nSTEP 1 — ESTABLISH THE POLICY BASELINE:\nI started by drafting core security policies aligned to ISO 27001 Annex A controls: Acceptable Use, Password Policy, Email Security, Data Retention, and Incident Response.\n\nSTEP 2 — SELECT A COMPLIANCE TOOL:\nI evaluated platforms on 4 criteria — tech stack compatibility, cost (startup budget), vendor reputation, scalability. I selected Watchdog Security: centralized employee compliance tracking, simplified risk assessments, full dashboard visibility.\n\nSTEP 3 — BUILD THE AWARENESS PROGRAM:\nRole-based training — AI security practices for developers, general security awareness for everyone else. Made it mandatory with deadlines.\n\nSTEP 4 — MEASURE AND EVIDENCE:\nTracked participation weekly. By end of Q1: 93% completion — generating the compliance evidence package for our ISO 27001 readiness audit.\n\nKey insight: compliance isn't about having policies, it's about having proof. Auditors don't read policies — they ask for evidence.",
+                keyPoints: [
+                    "Started with policy baseline: ISO 27001 Annex A mapping",
+                    "Tool selection: 4-criteria evaluation (real methodology, not random)",
+                    "Watchdog Security: centralized tracking + compliance dashboard",
+                    "Role-based training: developers got different content than general staff",
+                    "93% Q1 participation — this IS the compliance evidence",
+                    "Key insight: compliance = proof, not just policies"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. THIS IS YOUR STAR STORY EXTENDED: You can pivot this answer to almost any GRC question. CREDIBILITY LINE: 'Auditors don't read policies — they ask for evidence' — this shows real-world maturity. SPECIFICITY: Name Watchdog Security, name ISO 27001 Annex A — specifics build trust. DON'T RUSH THE RESULT: Let 93% land with a pause."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between ISO 27001 and NIST CSF? When would you use each?",
+                answer: "These are the two frameworks I work with most, and they serve different purposes:\n\nISO 27001:\n• A certifiable international standard — you can get audited and receive a certificate\n• Prescriptive: tells you WHAT controls to implement (Annex A has 93 controls in the 2022 edition)\n• Requires an Information Security Management System (ISMS) — documented, maintained, audited\n• Best for: organizations that need to prove compliance to external parties\n• At Oasis, we aligned to ISO 27001 because our enterprise clients were going to ask for it\n\nNIST CSF (Cybersecurity Framework):\n• A voluntary framework, not a certification — more flexible\n• Organized around 5 functions: Identify → Protect → Detect → Respond → Recover\n• Best for: internal security program planning, communicating risk to executives, assessing maturity\n• Common in US federal and critical infrastructure environments\n\nKEY DIFFERENCE: ISO 27001 is about certification and auditability. NIST CSF is about having a common language and structured improvement roadmap.\n\nIn practice: use NIST CSF to plan and assess internally, use ISO 27001 to prove it externally.",
+                keyPoints: [
+                    "ISO 27001: certifiable, prescriptive, ISMS-based, 93 Annex A controls",
+                    "NIST CSF: voluntary, flexible, 5 functions (Identify/Protect/Detect/Respond/Recover)",
+                    "ISO = external proof of compliance; NIST = internal improvement language",
+                    "Oasis aligned to ISO 27001 because enterprise clients require it",
+                    "US federal/critical infrastructure = NIST CSF territory",
+                    "Real answer: use both — NIST to build, ISO to prove"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. STRUCTURE: Define each separately before comparing — don't blend them. OASIS CONNECTION: 'At Oasis, we chose ISO 27001 because...' — grounds it in real decision-making. MEMORABLE CLOSE: 'Use NIST to build, ISO to prove' — clean, quotable line that interviewers remember."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: An auditor asks you to prove your security awareness training program meets compliance requirements. What do you show them?",
+                answer: "This is exactly the situation I prepared for at Oasis — here's what I'd present:\n\nDOCUMENT 1 — THE POLICY:\nOur Security Awareness Training Policy — signed by management, dated, version-controlled. This establishes the requirement. Auditors need to see that leadership mandated this.\n\nDOCUMENT 2 — THE TRAINING CONTENT:\nExports of the training modules in Watchdog Security — topics covered, learning objectives, completion criteria: AI security for developers, general awareness for all staff.\n\nDOCUMENT 3 — THE COMPLETION RECORDS:\nWatchdog Security's participation dashboard — each employee's name, training assigned, date completed. At Oasis: 93% completion by end of Q1. This is your evidence.\n\nDOCUMENT 4 — THE GAPS EXPLANATION:\nFor the 7% who didn't complete: show the follow-up process — reminder emails, manager escalation, HR involvement. Auditors respect documented follow-up far more than a fake 100%.\n\nDOCUMENT 5 — THE MAPPING:\nA one-pager mapping our training program to ISO 27001 control A.6.3 — Information security awareness, education and training.\n\nKey principle: auditors are looking for evidence of a process, not a perfect score.",
+                keyPoints: [
+                    "Policy first: management-signed, version-controlled — establishes authority",
+                    "Training content: what topics, what objectives — Watchdog exports",
+                    "Completion records: named, dated, scored — 93% completion proof",
+                    "Gaps documentation: showing follow-up is MORE credible than fake 100%",
+                    "ISO mapping: A.6.3 control — proves you know why, not just what",
+                    "Key principle: evidence of process > evidence of perfection"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. WALK THEM THROUGH: 'I'd show them 5 things...' — structured, confident, thorough. WATCHDOG SPECIFIC: Naming the tool shows this is real. SMART TAKE: The 'gaps + follow-up' point always impresses auditors and interviewers — shows maturity. ISO MAPPING: Drop the control number (A.6.3) if you can — it signals deep framework knowledge. CLOSE STRONG: End with the principle — it's memorable."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between a policy, a standard, a procedure, and a guideline?",
+                answer: "These are four distinct levels of governance documentation — I built all four at Oasis:\n\nPOLICY (the WHY and WHAT):\nHigh-level, mandatory, executive-approved statements of intent. 'All employees must complete security awareness training annually.' Non-compliance has consequences. Short, broad, doesn't change often.\n\nSTANDARD (the HOW MUCH):\nSpecific, measurable requirements that support the policy. 'Passwords must be minimum 12 characters, include upper/lower/number/symbol, and not be reused for 10 cycles.' Updated when technology changes.\n\nPROCEDURE (the HOW, STEP-BY-STEP):\nDetailed instructions for how to actually do something. Specific enough that a new hire could follow it.\n\nGUIDELINE (the RECOMMENDED):\nSuggested best practices — not mandatory. 'It is recommended that developers use a password manager.'\n\nMEMORY AID: Policy = law. Standard = regulation. Procedure = instruction manual. Guideline = advice.\n\nAt Oasis: I built all four layers — executive policy for accountability, standards for measurability, procedures for repeatability, guidelines for developer enablement.",
+                keyPoints: [
+                    "Policy: mandatory, executive-level, the WHY (compliance consequences)",
+                    "Standard: measurable requirements supporting the policy (password specs)",
+                    "Procedure: step-by-step how-to, new-hire followable",
+                    "Guideline: recommended, not mandatory (developer best practices)",
+                    "Memory aid: Law → Regulation → Instruction manual → Advice",
+                    "Built all 4 at Oasis — shows you've done this, not just studied it"
+                ],
+                deliveryNotes: "TIMING: ~60 seconds. DEFINE EACH CLEARLY: One sentence per level before examples. CONCRETE EXAMPLES: Password policy works perfectly — it spans all 4 levels naturally. BUILT THIS: 'I built all four at Oasis' is your credibility line — say it. MEMORY AID: If nerves hit, the law/regulation/instruction/advice analogy will rescue you. SPEED: This is a knowledge question — don't over-elaborate. Crisp and clear wins."
+            },
+            {
+                type: "conceptual",
+                question: "What is PCI-DSS and how does it intersect with the work you've done?",
+                answer: "PCI-DSS stands for Payment Card Industry Data Security Standard. It's a set of security requirements that any organization storing, processing, or transmitting cardholder data must comply with.\n\nTHE 12 REQUIREMENTS cover: network security (firewalls, no vendor defaults), data protection (encrypt cardholder data, restrict access), vulnerability management (patching, anti-malware), access control (MFA, unique IDs, least privilege), monitoring (audit logs, regular testing), and governance (security policy).\n\nSCOPE MATTERS:\nPCI-DSS scope is about the cardholder data environment (CDE). Reducing scope through network segmentation and tokenization is often the smartest compliance strategy.\n\nMY INTERSECTION:\nOasis doesn't process payments, so it wasn't our primary standard — however, ISO 27001 controls we implemented map directly to PCI-DSS: access control, audit logging, security awareness training, and IR.\n\nAt CIBC — a major bank — PCI-DSS was foundational. My Azure, Active Directory, and ServiceNow work there existed within a heavily regulated financial environment where payment data security was embedded into every infrastructure decision.",
+                keyPoints: [
+                    "PCI-DSS: payment card data standard — applies to anyone handling card data",
+                    "12 requirements: network → data protection → access control → monitoring → governance",
+                    "Scope reduction: network segmentation + tokenization = smart compliance strategy",
+                    "ISO 27001 overlap: access control, audit logs, training, IR all map to PCI",
+                    "CIBC connection: bank environment where PCI-DSS was foundational to infrastructure",
+                    "Shows cross-framework thinking — compliance isn't siloed"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. DEFINE IT FIRST: One sentence before diving into requirements. DON'T MEMORIZE ALL 12: Group them into themes — more impressive than reciting numbers. CIBC DROP: This is the natural place to mention CIBC — financial services = PCI territory. HONEST: Acknowledge Oasis wasn't PCI-in-scope, but bridge to ISO overlap — it shows framework thinking."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: You've just joined a new company and need to perform their first risk assessment. Walk me through your exact process.",
+                answer: "This is essentially what I did at Oasis. Here's my methodology:\n\nSTEP 1 — ASSET INVENTORY:\nYou can't protect what you don't know you have. Catalogue all assets: systems, data, people, third-party services. Classify by sensitivity — what would hurt the most if compromised?\n\nSTEP 2 — THREAT IDENTIFICATION:\nFor each asset category, what are the realistic threats? Phishing, insider threat, misconfigured cloud storage, unpatched servers. Use STRIDE or a threat library as a starting point.\n\nSTEP 3 — VULNERABILITY ASSESSMENT:\nWhat weaknesses exist that could be exploited? Run scans, review configurations, check patch levels — at Oasis, I identified 11+ vulnerabilities through my web app pentest work.\n\nSTEP 4 — LIKELIHOOD × IMPACT MATRIX:\nFor each threat-vulnerability pair: how likely is exploitation? What's the impact? Plot on a risk matrix. This gives you a prioritized risk register.\n\nSTEP 5 — RISK TREATMENT:\nFor each risk: Accept (too low/costly to fix), Mitigate (implement a control), Transfer (insurance), or Avoid (stop the activity). Document the decision and owner.\n\nSTEP 6 — DOCUMENT AND REVIEW:\nFormal risk register with owners, treatment decisions, and review dates. Review quarterly or after any significant change.",
+                keyPoints: [
+                    "Step 1: Asset inventory — 'can't protect what you don't know about'",
+                    "Step 2: Threat identification — STRIDE or threat library (not just vibes)",
+                    "Step 3: Vulnerability assessment — 11+ vulns found at Oasis (real number)",
+                    "Step 4: Likelihood × Impact matrix — standard risk scoring methodology",
+                    "Step 5: Risk treatment — Accept / Mitigate / Transfer / Avoid",
+                    "Step 6: Document + quarterly review — risk is not a one-time activity"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. GROUND IT IN OASIS IMMEDIATELY: 'This is essentially what I did at Oasis...' — establishes credibility before the framework. 11+ VULNS: Drop this number naturally in Step 3 — it's specific and memorable. RISK TREATMENT TERMS: Say all four (Accept/Mitigate/Transfer/Avoid) — interviewers in GRC will specifically listen for these. CLOSE: 'Risk is not static' is a mature, experienced observation. Don't skip the review step."
             }
-        }
+        ],
 
-        function resetFlip() {
-            document.getElementById('flashcard').classList.remove('flipped');
-            isFlipped = false;
-        }
-
-        function updateProgress() {
-            const progress = ((currentIndex + 1) / flashcards.length) * 100;
-            document.getElementById('progressFill').style.width = progress + '%';
-        }
-
-        function updateButtonStates() {
-            document.getElementById('prevBtn').disabled = currentIndex === 0;
-            document.getElementById('nextBtn').disabled = currentIndex === flashcards.length - 1;
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') previousCard();
-            if (e.key === 'ArrowRight') nextCard();
-            if (e.key === ' ') {
-                e.preventDefault();
-                flipCard();
+        infrastructure: [
+            {
+                type: "conceptual",
+                question: "Explain the cloud shared responsibility model. How does it work in Azure specifically?",
+                answer: "The shared responsibility model defines who secures what in a cloud environment — the cloud provider vs. the customer. The split depends on the service model:\n\nIN AZURE (IaaS — like VMs):\n• Microsoft is responsible for: physical data center security, network infrastructure, host hardware\n• Customer is responsible for: operating system patching, network configuration, identity and access, application security, and data protection\n\nIN PAAS (like Azure App Service):\n• Microsoft handles more — OS, runtime, middleware\n• Customer still owns: data, identity, application code, access control\n\nIN SAAS (like Microsoft 365):\n• Microsoft handles almost everything operationally\n• Customer still owns: data classification, user access management, compliance settings\n\nWHY IT MATTERS IN PRACTICE:\nAt CIBC, the shared model meant cloud misconfigurations — exposed storage blobs, overly permissive IAM roles, no MFA on admin accounts — were our responsibility to catch, not Microsoft's.\n\nBiggest misconception: 'It's in Azure so it's secure.' The model doesn't protect you from your own misconfigurations.",
+                keyPoints: [
+                    "Model splits by service type: IaaS (most customer) → PaaS → SaaS (least customer)",
+                    "Azure IaaS: Microsoft = physical + hardware; Customer = OS, IAM, data, app",
+                    "CIBC Azure experience — this was a real operational environment",
+                    "Biggest risk: misconfigurations (exposed blobs, permissive IAM, no MFA)",
+                    "Key misconception: 'It's in Azure so it's secure' — not how it works",
+                    "Secure by default vs secure by configuration — know the difference"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. CIBC ANCHOR: Drop it early — 'In my Azure work at CIBC...' establishes real-world context. IaaS/PaaS/SaaS SPLIT: Walk through all three briefly — shows framework depth. MISCONCEPTION LINE: 'It's in Azure so it's secure' is a quote interviewers hear from clients — calling it out shows maturity. CLOSE: Connect to cloud misconfiguration detection at enterprise scale."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between Azure Active Directory and on-premises Active Directory? What security implications does each have?",
+                answer: "Both are identity platforms from Microsoft, but architecturally very different:\n\nON-PREMISES ACTIVE DIRECTORY (AD):\n• Domain-joined, Kerberos/NTLM authentication protocols\n• Group Policy Objects (GPOs) for centralized configuration enforcement\n• Requires domain controllers — physical or virtual servers on your network\n• Security risk: pass-the-hash, pass-the-ticket, Kerberoasting attacks exploit NTLM/Kerberos\n• At CIBC, I worked with on-prem AD for managing user accounts, Citrix access, and Hyper-V VM environments\n\nAZURE ACTIVE DIRECTORY (Azure AD / Entra ID):\n• Cloud-native, uses modern protocols: OAuth 2.0, OpenID Connect, SAML\n• No domain controllers — Microsoft manages the infrastructure\n• Enables SSO for cloud apps, Conditional Access policies, MFA enforcement\n• Security risk: token theft, OAuth app abuse, misconfigured Conditional Access\n\nHYBRID ENVIRONMENTS:\nMany enterprises — including CIBC — run both. Azure AD Connect syncs on-prem identities to Azure AD, creating a larger attack surface.\n\nKEY PRINCIPLE: In both environments, least privilege + MFA are non-negotiable. But the attack vectors differ — defend accordingly.",
+                keyPoints: [
+                    "AD: Kerberos/NTLM, GPOs, domain controllers — on-prem attack vectors",
+                    "Azure AD: OAuth/OIDC, cloud-native, Conditional Access — token theft risk",
+                    "CIBC: worked with on-prem AD for user accounts, Citrix, Hyper-V",
+                    "Hybrid environment: Azure AD Connect syncs both — larger attack surface",
+                    "Attack vectors differ: Kerberoasting (AD) vs token theft (Azure AD)",
+                    "Universal principle: least privilege + MFA in both environments"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. CIBC IS YOUR CREDIBILITY: 'At CIBC, I worked with AD for Citrix and Hyper-V management' — specific tools, specific context. ATTACK VECTOR NAMES: Kerberoasting, pass-the-hash — dropping these shows you understand offensive implications, not just defensive theory. HYBRID ENVIRONMENT: This is the enterprise reality at large orgs like TELUS — bring it up."
+            },
+            {
+                type: "conceptual",
+                question: "How does Terraform improve security in infrastructure deployments? What's the DevSecOps connection?",
+                answer: "Terraform is Infrastructure as Code (IaC) — you define your infrastructure in code, and Terraform provisions it consistently. At ECG, I worked with Terraform and Docker in a DevSecOps environment:\n\n1. AUDITABILITY: Infrastructure changes are version-controlled in Git. You can see who changed what, when, and why — a built-in audit trail. No more 'someone clicked something in the console.'\n\n2. CONSISTENCY: Environments are provisioned identically every time. No drift, no misconfigurations from manual setup.\n\n3. POLICY AS CODE: Tools like Sentinel or OPA enforce security policies at provisioning time. E.g., 'No S3 bucket can be created without encryption' — the pipeline rejects non-compliant infrastructure before it's deployed.\n\n4. LEAST PRIVILEGE ENFORCEMENT: IAM roles and permissions are defined in code, reviewed in PRs, and applied consistently — not manually clicked by an admin giving too much access 'just in case.'\n\nDEVSECOPS CONNECTION:\nTerraform shifts security left — security controls are embedded in the provisioning code itself. At ECG, security was a participant in every infrastructure change, not an afterthought.\n\nKey mindset: if it's not in code, it doesn't exist.",
+                keyPoints: [
+                    "ECG: Terraform + Docker in DevSecOps environment (real experience)",
+                    "Auditability: Git history = infrastructure audit trail (no console mysteries)",
+                    "Consistency: no drift = no misconfiguration surprise",
+                    "Policy as Code: Sentinel/OPA rejects non-compliant infra at pipeline time",
+                    "Least privilege: IAM in code → reviewed in PRs → applied consistently",
+                    "DevSecOps shift: security embedded in provisioning, not bolted on after"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. ECG ANCHOR: 'At ECG, I worked with Terraform in a DevSecOps context' — leads with real experience. POLICY AS CODE: This concept will impress any DevSecOps-oriented interviewer — it's the advanced answer. CLOSE: 'If it's not in code, it doesn't exist' is a clean, quotable DevSecOps principle."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: A developer accidentally commits AWS access keys to a public GitHub repo. You're notified 15 minutes later. What do you do?",
+                answer: "This is a real incident — bots scrape public repos within minutes. Time is critical.\n\nIMMEDIATE (0–2 minutes):\n• Revoke the compromised keys immediately via AWS IAM console — deactivate, don't just rotate. Old keys must be completely invalidated.\n\nINVESTIGATION (2–15 minutes):\n• Check AWS CloudTrail — what API calls were made using those keys?\n• Look for: new IAM users created, S3 buckets accessed or made public, EC2 instances spun up (cryptomining), data exfiltrated\n• Determine the blast radius — what permissions did those keys have?\n\nCONTAINMENT:\n• If unauthorized activity confirmed: isolate affected resources, revoke related sessions\n• Assess what data was accessible and review breach notification requirements\n• Check for persistence: attackers create new IAM users or roles to maintain access\n\nREMEDIATION:\n• Issue new, properly scoped keys (or better — use IAM roles instead of long-lived keys)\n• Remove commit from GitHub history using BFG Repo Cleaner or git filter-branch\n• Add pre-commit hooks (git-secrets, trufflehog) to prevent future leaks\n• Brief the developer — learning moment, not a blame moment",
+                keyPoints: [
+                    "Revoke FIRST (2 min) — bots scrape keys within minutes, move fast",
+                    "CloudTrail audit: what was accessed/created/modified with those keys?",
+                    "Check for persistence: new IAM users, EC2 instances, role escalation",
+                    "Blast radius: what permissions did the keys have? (scope of damage)",
+                    "Remove from Git history: BFG Repo Cleaner — not just delete the file",
+                    "Prevention: pre-commit hooks (git-secrets/trufflehog) + use IAM roles"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. URGENCY FIRST: 'Bots scrape within minutes — revoke immediately' shows operational instincts, not textbook thinking. CLOUDTRAIL: Naming AWS CloudTrail is critical — interviewers check for this. PERSISTENCE CHECK: Asking 'did they create new resources?' shows attacker mindset — this is the advanced answer. BLAME vs LEARNING: 'Brief the developer — learning moment not blame moment' shows leadership maturity."
+            },
+            {
+                type: "conceptual",
+                question: "What are the top security risks with Docker containers and how do you mitigate them?",
+                answer: "I worked with Docker in a DevSecOps environment at ECG. The top container security risks:\n\n1. RUNNING AS ROOT:\nBy default, many containers run as root — if an attacker escapes the container, they have root on the host. Mitigation: specify a non-root user in the Dockerfile with the USER directive.\n\n2. UNPATCHED BASE IMAGES:\nA container built on an outdated Ubuntu or Alpine image inherits all its vulnerabilities. Mitigation: scan images with Trivy or Snyk in CI, pin base image versions, rebuild regularly.\n\n3. SECRETS BAKED INTO IMAGES:\nAPI keys or passwords in Dockerfiles get baked into image layers — visible to anyone who pulls the image. Mitigation: use Docker secrets, AWS Secrets Manager, or HashiCorp Vault. Never in the image.\n\n4. EXPOSED DOCKER SOCKET:\nMounting /var/run/docker.sock into a container gives it full control over the Docker host. Never do this unless absolutely necessary.\n\n5. EXCESSIVE CAPABILITIES:\nContainers can be given Linux capabilities beyond what they need. Mitigation: --cap-drop=ALL --cap-add=only_what_is_needed.\n\nOverall principle: treat containers like code — scan, version, review, and apply least privilege.",
+                keyPoints: [
+                    "ECG: real Docker experience in DevSecOps environment",
+                    "Running as root: non-root USER in Dockerfile is non-negotiable",
+                    "Unpatched images: Trivy or Snyk image scanning in CI pipeline",
+                    "Secrets in images: Docker secrets / Secrets Manager / Vault — never in Dockerfile",
+                    "Exposed Docker socket = host root access — never do this",
+                    "Capabilities: drop ALL, add back only what's needed"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. ECG ANCHOR: Lead with 'At ECG, I worked with Docker in a DevSecOps pipeline...' PICK 3: If time-pressed, prioritize root user, secrets in images, and unpatched base images. TOOL NAMES: Trivy, Snyk — specific tools show you've actually done this. CLOSE WITH PRINCIPLE: 'Treat containers like code — scan, version, least privilege' is a great wrap-up line."
+            },
+            {
+                type: "conceptual",
+                question: "What is the principle of least privilege and how do you enforce it practically in cloud environments?",
+                answer: "Least privilege means: give users, services, and systems only the minimum permissions required to do their job — nothing more.\n\nIt's one of the most important principles in cloud security because the blast radius of any compromise is directly proportional to the permissions the compromised identity has.\n\nHOW I'VE APPLIED IT:\n\nAt CIBC (Azure environment):\n• Azure RBAC: assigned roles at the most specific scope (resource group, not subscription)\n• Reviewed AD group memberships — many users had inherited admin rights they never used\n• Citrix: users could only access the applications their role required\n\nAt Oasis:\n• Watchdog Security dashboard: only Security team had admin access; all others read-only\n• Developer access reviewed quarterly — former contractors had lingering access removed\n\nPRACTICAL TOOLS:\n• Azure: RBAC + Privileged Identity Management (PIM) for just-in-time admin access\n• AWS: IAM policies scoped to specific resources + AWS Access Analyzer\n• General: access reviews on a schedule, not just at onboarding\n\nKEY INSIGHT: Least privilege is not a one-time setup — it's a continuous process. Access tends to grow over time (access creep); the discipline is in the regular review.",
+                keyPoints: [
+                    "Definition: minimum permissions to do the job — nothing more",
+                    "Blast radius principle: compromise damage = f(permissions held)",
+                    "CIBC: Azure RBAC scoped to resource group level, AD group review",
+                    "Oasis: Watchdog admin-only for security team, quarterly access reviews",
+                    "Azure PIM: just-in-time admin access (advanced, impressive to name)",
+                    "Access creep is real — least privilege requires continuous review"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. LEAD WITH DEFINITION: One clear sentence. BLAST RADIUS FRAMING: This is the 'why it matters' — interviewers love it. DUAL EXPERIENCE: CIBC + Oasis gives you two distinct contexts (enterprise vs startup). PIM MENTION: Azure Privileged Identity Management for just-in-time access is an advanced detail that signals real Azure depth. CLOSE: Access creep insight shows operational maturity."
             }
+        ],
+
+        appsec: [
+            {
+                type: "conceptual",
+                question: "Walk me through your web application penetration testing methodology at Oasis.",
+                answer: "At Oasis, I'm conducting web application pentests on our products before they ship — real targets, real vulnerabilities. My methodology:\n\nPHASE 1 — SCOPING & RULES OF ENGAGEMENT:\nBefore touching anything: document what's in scope, what's out of scope, testing windows, and who to notify if I find something critical.\n\nPHASE 2 — RECONNAISSANCE:\nPassive recon first — tech stack identification (Wappalyzer), subdomain enumeration, reviewing public-facing documentation.\n\nPHASE 3 — SCANNING & ENUMERATION:\nActive scanning — directory bruteforcing (Gobuster/FFUF), crawling the application (Burp Suite Spider), mapping all endpoints, parameters, and authentication flows. Where does user input go? That's where vulnerabilities live.\n\nPHASE 4 — EXPLOITATION:\nManual testing for OWASP Top 10 — injection flaws, broken access control, security misconfigurations, IDOR. Burp Suite as my primary proxy. At Oasis: 11+ vulnerabilities identified including access control issues.\n\nPHASE 5 — REPORTING:\nFor each vulnerability: severity (CVSS score), steps to reproduce, proof of concept, and a remediation recommendation. The report is for developers — it needs to be actionable, not just impressive-looking.",
+                keyPoints: [
+                    "Oasis: real web app pentest, real products, 11+ vulnerabilities found",
+                    "Scoping first: rules of engagement protect you legally and professionally",
+                    "Phase structure: Recon → Scanning → Exploitation → Reporting",
+                    "Tools: Burp Suite (primary proxy), Gobuster/FFUF (directory brute), Wappalyzer",
+                    "Testing focus: where does user input go? That's the vulnerability surface",
+                    "Reporting standard: severity + reproduction steps + remediation = actionable for devs"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. 11+ VULNS IS YOUR HOOK: Lead with it or close with it — 'Real targets, real findings.' PHASE NAMES: Walk through phases conversationally, not robotically. BURP SUITE: Name it confidently — industry standard. REPORTING EMPHASIS: Many testers focus on finding; emphasizing reporting shows maturity — findings don't matter if developers can't fix them."
+            },
+            {
+                type: "conceptual",
+                question: "What are the top 3 OWASP vulnerabilities you look for first, and why those three?",
+                answer: "I prioritize based on impact, prevalence, and what I've actually found in real apps:\n\n#1 — BROKEN ACCESS CONTROL (OWASP #1, 2021):\nThis is the most dangerous and most common — includes IDOR where you change a user ID in a request and access someone else's data. Developers write business logic fast and forget to validate 'does this user have permission for THIS resource?' At Oasis, access control issues were in my findings.\n\nWHY FIRST: High impact (data exposure, privilege escalation), hard to catch with scanners, requires manual testing logic — this is where a human tester adds value a tool can't.\n\n#2 — INJECTION (SQL, XSS, Command):\nAny time user input touches a backend without proper sanitization. SQL injection can expose or destroy entire databases. XSS can steal session cookies. Classic but still very common in startup codebases moving fast.\n\nWHY SECOND: Direct path to data exfiltration or account takeover — maximum impact.\n\n#3 — SECURITY MISCONFIGURATION:\nDebug mode in production, default credentials, exposed admin panels, S3 buckets without access controls. Extremely common in cloud-deployed apps built by teams focused on shipping.\n\nWHY THIRD: Low-effort to find, often missed because it's not 'code.' In cloud apps, misconfigs are everywhere.",
+                keyPoints: [
+                    "#1 Broken Access Control: OWASP #1, includes IDOR, found at Oasis",
+                    "Why BAC first: hard for scanners to catch, human logic required",
+                    "#2 Injection: SQL/XSS/Command — user input → backend = test here",
+                    "Why Injection: direct path to data theft or account takeover",
+                    "#3 Security Misconfiguration: debug mode, default creds, exposed buckets",
+                    "Why Misconfig: fast-shipping teams miss it — especially in cloud apps"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. EXPLAIN THE 'WHY': Don't just list — explain WHY each is your priority. That's what separates a tester who studied from a tester who tested. OASIS REFERENCE: 'At Oasis, access control issues were in my findings' — drop this for #1. SCANNER vs HUMAN: The 'manual testing is where humans add value' point is insightful and interviewers love it."
+            },
+            {
+                type: "conceptual",
+                question: "What's the difference between SAST and DAST? When do you use each in a DevSecOps pipeline?",
+                answer: "SAST and DAST are complementary — they find different vulnerabilities at different stages:\n\nSAST (Static Application Security Testing):\n• Analyzes source code without running the application\n• Finds vulnerabilities in the code itself — hardcoded secrets, SQL injection patterns, insecure function calls\n• Runs early: in the IDE or as a PR check before merge\n• Tools: SonarQube, Semgrep, CodeQL, Checkmarx\n• Limitation: high false positive rate, can't find runtime logic flaws\n\nDAST (Dynamic Application Security Testing):\n• Tests the running application — black box, like an attacker would\n• Finds vulnerabilities that only appear at runtime: broken authentication, IDOR, business logic flaws\n• Runs later: against staging or pre-production environments\n• Tools: OWASP ZAP, Burp Suite (manual), Nikto\n• Limitation: misses source-level issues, needs a deployed environment\n\nIN A DEVSECOS PIPELINE (from my ECG work):\nSAST in the CI pipeline catches obvious code-level issues before merge. DAST runs against deployed staging before release. Together they cover both 'what's in the code' and 'what's exploitable at runtime.'\n\nKey principle: SAST shifts left; DAST validates reality. Neither replaces manual testing.",
+                keyPoints: [
+                    "SAST: source code analysis, no running app, early in pipeline (IDE/PR)",
+                    "DAST: running app testing, black-box, later in pipeline (staging)",
+                    "SAST tools: SonarQube, Semgrep, CodeQL — code-level findings",
+                    "DAST tools: OWASP ZAP, Burp Suite (manual), Nikto — runtime findings",
+                    "ECG DevSecOps: SAST in CI/merge checks, DAST pre-release in staging",
+                    "Key principle: SAST shifts left, DAST validates reality — neither replaces manual testing"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. DEFINE CLEARLY FIRST: One sentence each before tools. ECG PIPELINE REFERENCE: 'From my DevSecOps work at ECG...' — grounds it in real experience. TOOL NAMES: SonarQube, Semgrep, OWASP ZAP — specific tools signal hands-on knowledge. CLOSE: 'Neither replaces manual testing' — shows you value your own pentest work."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: Mid-pentest on an Oasis product, you find an IDOR vulnerability that could expose customer data for all users. What do you do?",
+                answer: "This is a real scenario I could face at Oasis — here's exactly how I'd handle it:\n\nSTEP 1 — STOP EXPLOITING IMMEDIATELY:\nOnce I've confirmed the vulnerability and have 1–2 proof-of-concept requests, I stop. I don't need to pull 10,000 customer records to prove it's real. Further exploitation is unnecessary and potentially illegal.\n\nSTEP 2 — DOCUMENT THOROUGHLY:\n• Screenshot the vulnerable request and response (redacting actual customer data)\n• Record exact steps to reproduce: URL, parameter name, what value I changed, what was returned\n• Assign severity: IDOR exposing customer data = Critical or High (CVSS 8+)\n• Note timestamp of discovery\n\nSTEP 3 — IMMEDIATE DISCLOSURE:\nThis doesn't wait for the final pentest report — flag it immediately.\n• Notify: my manager, the lead developer, and whoever owns data privacy\n• Use our incident communication channel: Slack + email at Oasis\n\nSTEP 4 — REMEDIATION GUIDANCE:\nI don't just say 'fix it' — I provide specific guidance: 'Validate that the authenticated user owns the resource being requested before returning data. Check authorization server-side, not client-side.'\n\nSTEP 5 — RETEST AFTER THE FIX:\nOnce the developer deploys a fix, I retest the vulnerability and related endpoints to confirm resolution.",
+                keyPoints: [
+                    "Stop exploiting immediately — 1-2 POC requests is enough, not 10,000",
+                    "Document: screenshot + exact steps + severity (CVSS) + timestamp",
+                    "Immediate disclosure: don't wait for final report — flag now",
+                    "Notify: manager + lead dev + data privacy owner",
+                    "Remediation guidance: server-side authorization check, not client-side",
+                    "Retest after fix: verify it's actually fixed, check for related regression"
+                ],
+                deliveryNotes: "TIMING: ~90 seconds. OPEN WITH 'STOP': This is the most important step and shows ethical judgment — interviewers are testing your instincts here. EVIDENCE FRAMING: '1–2 POC requests' not thousands — this is professional restraint. IMMEDIATE DISCLOSURE: Emphasize this — waiting for the final report on a critical data exposure is wrong. OASIS CONTEXT: 'At Oasis, I'd notify via Slack + email' — real communication channels. CLOSE WITH RETEST: Many testers forget this."
+            },
+            {
+                type: "conceptual",
+                question: "What is SQL injection, how does it work, and how do you prevent it?",
+                answer: "SQL injection is still being found in 2024 because developers prioritize shipping over input validation.\n\nHOW IT WORKS:\nAn attacker inserts malicious SQL code into an input field. If the application builds SQL queries by concatenating user input directly — without sanitization — the attacker's SQL becomes part of the query.\n\nExample:\nVulnerable: SELECT * FROM users WHERE username = '\" + userInput + \"'\nAttacker inputs: admin' --\nResult: SELECT * FROM users WHERE username = 'admin' --'\nThe -- comments out the password check. Login bypassed.\n\nTYPES:\n• Classic/In-band: results returned directly — easy to exploit\n• Blind: no direct output, infer from app behaviour (boolean-based, time-based)\n• Out-of-band: data exfiltrated via DNS or HTTP requests\n\nHOW TO PREVENT:\n1. Parameterized queries / prepared statements — the input is NEVER treated as SQL code\n2. ORM frameworks that handle parameterization automatically\n3. Input validation and whitelisting at the application layer\n4. WAF as a secondary layer — not a replacement for code-level fixes\n5. Least privilege on DB accounts — the app shouldn't connect as db root",
+                keyPoints: [
+                    "Root cause: user input concatenated directly into SQL queries — never do this",
+                    "Classic example: admin' -- comments out password check (know this cold)",
+                    "Types: Classic, Blind (boolean/time-based), Out-of-band",
+                    "Prevention #1: Parameterized queries / prepared statements — the fix",
+                    "Prevention #2: Input validation + ORMs + WAF (secondary, not primary)",
+                    "Least privilege on DB: app shouldn't run as root against the database"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. EXPLAIN THE MECHANISM: Walk through the vulnerable query example — it shows you actually understand it. CLASSIC EXAMPLE: 'admin' --' is the classic demo — deliver it confidently. PREVENTION HIERARCHY: Parameterized queries FIRST, WAF LAST — many candidates get this backwards. PENTEST ANCHOR: 'From my Oasis pentest work, I test for SQLi early...' SPEED: Clear and confident over exhaustive."
+            },
+            {
+                type: "scenario",
+                question: "SCENARIO: A developer tells you 'we have a WAF, so we don't need to sanitize inputs.' How do you respond?",
+                answer: "This is a really common misconception — and a dangerous one. Here's how I'd handle that conversation:\n\nI'd start by agreeing: 'A WAF is a great security layer — I'm glad we have one. But it can't replace input sanitization, and here's why:'\n\nREASON 1 — WAFs CAN BE BYPASSED:\nWAF rules are pattern-based. Attackers use encoding, obfuscation, and fragmentation to evade WAF signatures. A parameterized query cannot be bypassed — the input simply never becomes executable code.\n\nREASON 2 — DEFENSE IN DEPTH:\nThe WAF protects at the network/application gateway layer. Input sanitization protects at the code layer. Relying on one layer means the other is unprotected.\n\nREASON 3 — MAINTENANCE BURDEN:\nWAF rules need updating as bypass techniques evolve. Parameterized queries are a permanent fix — they don't need maintenance.\n\nREASON 4 — INTERNAL THREATS:\nIf an attacker is already inside your network (via VPN or compromised endpoint), they may bypass the WAF entirely and hit the application directly.\n\nMY CLOSE: 'Think of the WAF as your front door lock. Input sanitization is the safe inside the house. You want both — especially when the front door lock can be picked.'\n\nThis is the DevSecOps mindset from ECG — security is everyone's responsibility, including developers.",
+                keyPoints: [
+                    "Start with agreement: 'WAF is great — glad we have it' — don't be confrontational",
+                    "WAFs are bypassable: encoding, obfuscation, fragmentation defeat pattern rules",
+                    "Parameterized queries CANNOT be bypassed — that's the key technical argument",
+                    "Defense in depth: network layer (WAF) + code layer (sanitization) = both required",
+                    "WAF maintenance burden: rules need updates; parameterized queries are permanent",
+                    "Analogy: 'WAF is the front door lock; sanitization is the safe inside' — memorable"
+                ],
+                deliveryNotes: "TIMING: ~75 seconds. DON'T DISMISS THE DEVELOPER: Start collaborative — 'I'm glad we have a WAF' — then explain. This is a leadership and communication moment as much as a technical one. TECHNICAL CORE: 'Parameterized queries cannot be bypassed' is the strongest argument — lead with it. ANALOGY: Front door lock + safe inside — use it, it's memorable. DEVSECOPS CLOSE: Tie back to ECG — shows security culture, not just security knowledge."
+            }
+        ]
+    };
+
+    /* ═══════════════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════════════ */
+    let currentCategory = null;
+    let currentDeck     = [];
+    let currentIndex    = 0;
+
+    /* ═══════════════════════════════════════════════
+       BUILD HOME SCREEN
+    ═══════════════════════════════════════════════ */
+    function buildHome() {
+        const grid = document.getElementById('categoryGrid');
+        grid.innerHTML = '';
+        categoryMeta.forEach(meta => {
+            const count = allCards[meta.key].length;
+            const pillsHTML = meta.pills.map(p =>
+                `<span class="pill pill-${p}">${meta.pillLabels[p]}</span>`
+            ).join('');
+
+            const card = document.createElement('div');
+            card.className = 'category-card';
+            card.style.setProperty('--accent', meta.accent);
+            card.innerHTML = `
+                <div class="cat-icon">${meta.icon}</div>
+                <div class="cat-name">${meta.name}</div>
+                <div class="cat-count">${count} Cards</div>
+                <div class="cat-desc">${meta.desc}</div>
+                <div class="cat-pills">${pillsHTML}</div>
+                <div class="cat-arrow">→</div>
+            `;
+            card.addEventListener('click', () => openDeck(meta.key));
+            grid.appendChild(card);
+        });
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════ */
+    function openDeck(categoryKey) {
+        currentCategory = categoryKey;
+        currentDeck     = allCards[categoryKey];
+        currentIndex    = 0;
+
+        const meta = categoryMeta.find(m => m.key === categoryKey);
+        document.getElementById('deckTitle').textContent    = `${meta.icon} ${meta.name}`;
+        document.getElementById('deckSubtitle').textContent = `${currentDeck.length} Cards`;
+
+        document.getElementById('homeScreen').style.display = 'none';
+        document.getElementById('deckScreen').style.display = 'block';
+        loadCard();
+    }
+
+    function goHome() {
+        document.getElementById('deckScreen').style.display = 'none';
+        document.getElementById('homeScreen').style.display = 'block';
+        resetFlip();
+    }
+
+    /* ═══════════════════════════════════════════════
+       CARD LOGIC
+    ═══════════════════════════════════════════════ */
+    function loadCard() {
+        const card = currentDeck[currentIndex];
+
+        document.getElementById('question').textContent = card.question;
+        document.getElementById('answer').textContent   = card.answer;
+
+        // Badge
+        const badge = document.getElementById('cardTypeBadge');
+        if (card.type === 'scenario') {
+            badge.innerHTML = '<span class="card-type-badge badge-scenario">⚡ Scenario-Based</span>';
+        } else if (card.type === 'conceptual') {
+            badge.innerHTML = '<span class="card-type-badge badge-conceptual">📚 Conceptual</span>';
+        } else {
+            badge.innerHTML = '<span class="card-type-badge badge-behavioural">🎯 Behavioural</span>';
+        }
+
+        // Key points
+        const list = document.getElementById('keyPoints');
+        list.innerHTML = '';
+        card.keyPoints.forEach(pt => {
+            const li = document.createElement('li');
+            li.textContent = pt;
+            list.appendChild(li);
         });
 
-        // Initialize
-        loadCard();
-    </script>
+        document.getElementById('deliveryNotes').textContent = card.deliveryNotes;
+        document.getElementById('cardCounter').textContent   =
+            `Card ${currentIndex + 1} of ${currentDeck.length}`;
+
+        updateProgress();
+        resetFlip();
+        updateButtons();
+    }
+
+    function flipCard() {
+        document.getElementById('flashcard').classList.toggle('flipped');
+    }
+    function nextCard() {
+        if (currentIndex < currentDeck.length - 1) { currentIndex++; loadCard(); }
+    }
+    function previousCard() {
+        if (currentIndex > 0) { currentIndex--; loadCard(); }
+    }
+    function resetFlip() {
+        document.getElementById('flashcard').classList.remove('flipped');
+    }
+    function updateProgress() {
+        const pct = ((currentIndex + 1) / currentDeck.length) * 100;
+        document.getElementById('progressFill').style.width = pct + '%';
+    }
+    function updateButtons() {
+        document.getElementById('prevBtn').disabled = currentIndex === 0;
+        document.getElementById('nextBtn').disabled = currentIndex === currentDeck.length - 1;
+    }
+
+    // Keyboard nav (only active when a deck is open)
+    document.addEventListener('keydown', e => {
+        if (document.getElementById('deckScreen').style.display === 'none') return;
+        if (e.key === 'ArrowLeft')  previousCard();
+        if (e.key === 'ArrowRight') nextCard();
+        if (e.key === ' ') { e.preventDefault(); flipCard(); }
+    });
+
+    // Init
+    buildHome();
+</script>
 </body>
 </html>
